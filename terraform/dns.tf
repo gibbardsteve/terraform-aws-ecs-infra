@@ -47,6 +47,20 @@ resource "aws_route53_record" "route53_record_domain" {
 
 }
 
+resource "aws_route53_record" "all_resp_domain" {
+  zone_id = data.aws_route53_zone.route53_domain.zone_id
+  name    = "all-response.${local.url}"
+  type    = "A"
+
+  depends_on = [aws_alb_listener.app_http]
+  alias {
+    name                   = aws_lb.service_lb.dns_name
+    zone_id                = aws_lb.service_lb.zone_id
+    evaluate_target_health = true
+  }
+
+}
+
 
 # Add a wildcard certificate for the domain
 resource "aws_acm_certificate" "cert" {

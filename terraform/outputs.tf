@@ -62,3 +62,7 @@ output "alb_response_url" {
 output "default_response_url" {
   value = "default-response.${local.url}"
 }
+
+output "all_response_url" {
+  value = "all-response.${local.url}"
+}

@@ -1,9 +1,22 @@
 # Terraform
 
-This terraform assumes that the AWS account has been bootstrapped with a domain in route 53.
-You can bootstrap a domain using the repository [terraform-bootstrap](https://github.com/gibbardsteve/terraform-bootstrap)
+This terraform assumes that the AWS account has been bootstrapped with a hosted zone domain in route 53.
+It also assumes the terraform state is bootstrapped to be stored in S3 with a DynamoDB lock file to prevent conflicts.
+You can bootstrap the terraform state using the repository [terraform-bootstrap](https://github.com/gibbardsteve/terraform-bootstrap)
 
 The terraform then builds the necessary infrastructure components that can be used to make a Fargate service accessible via an application load balancer (ALB) using https.
+
+To test that the ALB can be accessed via a series of restrictions the following sub-domains will return a response:
+
+- alb-response._domain_name_
+  - This will return a fixed HTML response from the ALB with status of 200 when access is allowed. Access is restricted based on the IP addresses specified in **alb_response_allowed_ips** variable.
+  - When the source ip address is not in the variable then 403 Forbidden is displayed.
+
+- default-response._domain_name_
+  - This will return a fixed text response from the ALB with status of 404 when access is allowed. Access is restricted based on the IP addresses specified in **alb_response_allowed_ips** variable.
+  - When the source ip address is not in the variable then 403 Forbidden is displayed.
+
+- all-response._domain_name_ - This will return a fixed HTML response with status of 200.
 
 The basic resources created by this infrastructure as code are:
 
@@ -16,7 +29,6 @@ The basic resources created by this infrastructure as code are:
   - Listener rules send success and error response for two specific subdomains (alb-response.example.com and default-response.example.com)
 - NAT Gateway (Network Address Translation)
 - Security Group
-
 
 ## Main Components
 
@@ -49,6 +61,10 @@ _Note: By default **all traffic will be blocked** as only loopback address is sp
 
 Update the list in the ip_set allowed-ips-default-response-subdomain.  
 _Note: By default **all traffic will be blocked** as only loopback address is specified_
+
+#### Access to all-response._domain_
+
+By default any IP address can navigate to all-response._domain_ and get a response from the ALB.
 
 ### Application Load Balancer
 

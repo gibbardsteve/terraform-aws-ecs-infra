@@ -38,7 +38,7 @@ resource "aws_wafv2_ip_set" "allowed_ips_alb_response_subdomain" {
   # Add the IP addresses that are allowed to access the alb-response subdomain
   # loopback is allowed in this example - Must UPDATE with your allowed IP lists
   ip_address_version = "IPV4"
-  addresses          = ["127.0.0.1/32"]
+  addresses          = var.alb_response_allowed_ips
 
 }
 
@@ -51,8 +51,7 @@ resource "aws_wafv2_ip_set" "allowed_ips_default_response_subdomain" {
 
   # Add the IP addresses that are allowed to access the default-response subdomain
   # loopback is allowed in this example - Must UPDATE with your allowed IP lists
-  addresses = ["127.0.0.1/32"
-  ]
+  addresses = var.default_response_allowed_ips
 
 }
 
@@ -79,7 +78,7 @@ resource "aws_wafv2_rule_group" "ip_allow_rule_group" {
 
         statement {
           byte_match_statement {
-            search_string = "default-response.${local.url}"
+            search_string = "alb-response.${local.url}"
             field_to_match {
               single_header {
                 name = "host"
@@ -142,6 +141,7 @@ resource "aws_wafv2_rule_group" "ip_allow_rule_group" {
       sampled_requests_enabled   = false
     }
   }
+
   visibility_config {
     cloudwatch_metrics_enabled = false
     metric_name                = "ips-allowed-metric"
@@ -177,6 +177,38 @@ resource "aws_wafv2_web_acl" "web_firewall" {
       sampled_requests_enabled   = false
     }
   }
+
+  rule {
+    name     = "all-response-rule"
+    priority = 2
+
+    action {
+      allow {}
+    }
+
+    statement {
+      byte_match_statement {
+        search_string = "all-response.${local.url}"
+        field_to_match {
+          single_header {
+            name = "host"
+          }
+        }
+        text_transformation {
+          priority = 0
+          type     = "NONE"
+        }
+        positional_constraint = "EXACTLY"
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = false
+      metric_name                = "friendly-rule-metric-name"
+      sampled_requests_enabled   = false
+    }
+  }
+
 
   tags = {
     Tag1 = "Value1"

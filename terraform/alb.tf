@@ -74,3 +74,23 @@ resource "aws_lb_listener_rule" "test_response" {
     }
   }
 }
+
+resource "aws_lb_listener_rule" "all_ip_response" {
+  listener_arn = aws_lb_listener.app_https.arn
+  priority     = 2
+
+  condition {
+    host_header {
+      values = ["all-response.${local.url}"]
+    }
+  }
+
+  action {
+    type = "fixed-response"
+    fixed_response {
+      content_type = "text/html"
+      message_body = "<html><body><h1>Response Available from Any IP</h1><p>This is a test response</p></body></html>"
+      status_code  = "200"
+    }
+  }
+}

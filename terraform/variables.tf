@@ -117,6 +117,19 @@ variable "private_subnets" {
 
 }
 
+variable "default_response_allowed_ips" {
+  description = "Default response allowed IPs"
+  type        = list(string)
+  default     = ["127.0.0.1/32"]
+}
+
+variable "alb_response_allowed_ips" {
+  description = "ALB response allowed IPs"
+  type        = list(string)
+  default     = ["127.0.0.1/32"]
+}
+
+
 variable "region" {
   description = "AWS region"
   type        = string
