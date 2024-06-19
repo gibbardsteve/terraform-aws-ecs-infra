@@ -25,6 +25,9 @@ The basic resources created by this infrastructure as code are:
 - VPC with Public and Private Subnets
 - WAF (Web Application Firewall)
   - By default this is configured to block all traffic, you **must update with your allowed ip list** to receive a response from the ALB
+  - If you are adding a service that needs to be allow listed by IP address then before provisioning your service you need to add:
+    - An ipset with list of ips that are allowed
+    - An appropriate rule in the ip_allow_rule_group
 - ALB (Application Load Balancer)
   - Listener rules send success and error response for two specific subdomains (alb-response.example.com and default-response.example.com)
 - NAT Gateway (Network Address Translation)
@@ -61,6 +64,10 @@ _Note: By default **all traffic will be blocked** as only loopback address is sp
 
 Update the list in the ip_set allowed-ips-default-response-subdomain.  
 _Note: By default **all traffic will be blocked** as only loopback address is specified_
+
+#### To allow ip addresses to _myservice_._domain_
+
+Add an ipset and appropriate rule in this terraform matching the _myservice_ subdomain.  The rest of your service configuration can be provisioned in separate Terraform
 
 #### Access to all-response._domain_
 
