@@ -4,21 +4,6 @@ data "aws_route53_zone" "route53_domain" {
   name = local.url
 }
 
-# SG - This is service specific. MUST BE MOVED TO THE SERVICE MODULE
-# resource "aws_route53_record" "route53_record" {
-#   zone_id = data.aws_route53_zone.route53_domain.zone_id
-#   name    = "${var.service_subdomain}.${local.url}"
-#   type    = "A"
-
-#   depends_on = [aws_alb_listener.app_http]
-#   alias {
-#     name                   = aws_lb.service_lb.dns_name
-#     zone_id                = aws_lb.service_lb.zone_id
-#     evaluate_target_health = true
-#   }
-
-# }
-
 resource "aws_route53_record" "route53_record" {
   zone_id = data.aws_route53_zone.route53_domain.zone_id
   name    = "alb-response.${local.url}"

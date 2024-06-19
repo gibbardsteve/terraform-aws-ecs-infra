@@ -129,6 +129,11 @@ variable "alb_response_allowed_ips" {
   default     = ["127.0.0.1/32"]
 }
 
+variable "github_audit_allowed_ips" {
+  description = "Github Audit allowed IPs"
+  type        = list(string)
+  default     = ["127.0.0.1/32"]
+}
 
 variable "region" {
   description = "AWS region"

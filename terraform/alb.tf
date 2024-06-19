@@ -9,15 +9,6 @@ resource "aws_lb" "service_lb" {
 
 }
 
-# SG -Service specific - This should be moved to the service module
-# resource "aws_lb_target_group" "fargate_tg" {
-#   name        = "fargate-tg"
-#   port        = 80
-#   protocol    = "HTTP"
-#   target_type = "ip"
-#   vpc_id      = module.vpc.vpc_id
-# }
-
 # Redirect HTTP to HTTPS
 resource "aws_alb_listener" "app_http" {
   load_balancer_arn = aws_lb.service_lb.arn

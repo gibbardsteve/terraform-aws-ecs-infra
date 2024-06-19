@@ -10,15 +10,6 @@ output "ecs_cluster_capacity_providers_id" {
   value = aws_ecs_cluster_capacity_providers.service_providers.id
 }
 
-# SG - This is service specific. MUST BE MOVED TO THE SERVICE MODULE
-# output "ecs_task_definition_arn" {
-#   value = aws_ecs_task_definition.ecs_service_definition.arn
-# }
-
-# output "ecs_task_definition_revision" {
-#   value = aws_ecs_task_definition.ecs_service_definition.revision
-# }
-
 output "aws_account_id" {
   value = data.aws_caller_identity.current.account_id
 }
@@ -27,21 +18,28 @@ output "main_vpc_id" {
   value = data.aws_vpc.main.id
 }
 
-# SG - This is service specific. MUST BE MOVED TO THE SERVICE MODULE
-# output "security_group_id" {
-#   value = aws_security_group.allow_rules_service.id
-# }
-
-# output "public_ip" {
-#   value = data.aws_network_interface.interface_tags.association[0].public_ip
-# }
-
 output "service_domain" {
   value = "${var.service_subdomain}.${local.url}"
 }
 
 output "service_lb_dns_name" {
   value = aws_lb.service_lb.dns_name
+}
+
+output "service_lb_zone_id" {
+  value = aws_lb.service_lb.zone_id
+}
+
+output "application_lb_arn" {
+  value = aws_lb.service_lb.arn
+}
+
+output "application_lb_https_listener_arn" {
+  value = aws_lb_listener.app_https.arn
+}
+
+output "web_firewall_arn" {
+  value = aws_wafv2_web_acl.web_firewall.arn
 }
 
 output "vpc_id" {

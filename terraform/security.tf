@@ -55,6 +55,19 @@ resource "aws_wafv2_ip_set" "allowed_ips_default_response_subdomain" {
 
 }
 
+resource "aws_wafv2_ip_set" "allowed_ips_github_audit_subdomain" {
+  name        = "allowed-ips-github-audit-subdomain"
+  description = "Allowed IPs for the github-audit subdomain"
+  scope       = "REGIONAL"
+
+  ip_address_version = "IPV4"
+
+  # Add the IP addresses that are allowed to access the default-response subdomain
+  # loopback is allowed in this example - Must UPDATE with your allowed IP lists
+  addresses = var.github_audit_allowed_ips
+
+}
+
 resource "aws_wafv2_rule_group" "ip_allow_rule_group" {
   capacity = 20
   name     = "ip-allow-rule-group"
@@ -141,6 +154,48 @@ resource "aws_wafv2_rule_group" "ip_allow_rule_group" {
       sampled_requests_enabled   = false
     }
   }
+
+  rule {
+    name     = "github-audit-rule"
+    priority = 3
+
+    action {
+      allow {}
+    }
+
+    statement {
+      and_statement {
+        statement {
+          ip_set_reference_statement {
+            arn = aws_wafv2_ip_set.allowed_ips_github_audit_subdomain.arn
+          }
+        }
+
+        statement {
+          byte_match_statement {
+            search_string = "github-audit.${local.url}"
+            field_to_match {
+              single_header {
+                name = "host"
+              }
+            }
+            text_transformation {
+              priority = 0
+              type     = "NONE"
+            }
+            positional_constraint = "EXACTLY"
+          }
+        }
+      }
+    }
+
+    visibility_config {
+      cloudwatch_metrics_enabled = false
+      metric_name                = "github-audit-metric"
+      sampled_requests_enabled   = false
+    }
+  }
+
 
   visibility_config {
     cloudwatch_metrics_enabled = false
