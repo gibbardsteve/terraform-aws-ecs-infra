@@ -1,6 +1,6 @@
-# Terraform
+# Terraform AWS ECS Infrastructure
 
-This terraform assumes that the AWS account has been bootstrapped with a hosted zone domain in route 53.
+This Terraform assumes that the AWS account has been bootstrapped with a hosted zone domain in route 53.
 It also assumes the terraform state is bootstrapped to be stored in S3 with a DynamoDB lock file to prevent conflicts.
 You can bootstrap the terraform state using the repository [terraform-bootstrap](https://github.com/gibbardsteve/terraform-bootstrap)
 
