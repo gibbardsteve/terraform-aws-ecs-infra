@@ -1,9 +1,3 @@
-variable "app_name" {
-  description = "Application name"
-  type        = string
-  default     = "sdp"
-}
-
 variable "aws_account_id" {
   description = "AWS Account ID"
   type        = string
@@ -17,31 +11,6 @@ variable "aws_access_key_id" {
 variable "aws_secret_access_key" {
   description = "AWS Secret Access Key"
   type        = string
-}
-
-variable "container_image" {
-  description = "Container image"
-  type        = string
-  default     = "sdp-repo-archive"
-}
-
-variable "container_tag" {
-  description = "Container tag"
-  type        = string
-  default     = "v0.0.1"
-
-}
-
-variable "container_port" {
-  description = "Container port"
-  type        = number
-  default     = 5000
-}
-
-variable "from_port" {
-  description = "From port"
-  type        = number
-  default     = 5000
 }
 
 variable "destroy_hosted_zone" {
@@ -62,40 +31,10 @@ variable "domain_extension" {
   default     = "aws.onsdigital.uk"
 }
 
-variable "log_retention_days" {
-  description = "Log retention days"
-  type        = number
-  default     = 90
-}
-
 variable "lb_delete_protection" {
   description = "Enable deletion protection for the load balancer"
   type        = bool
   default     = false
-}
-
-variable "service_subdomain" {
-  description = "Service subdomain"
-  type        = string
-  default     = "github-audit"
-}
-
-variable "service_cpu" {
-  description = "Service CPU"
-  type        = string
-  default     = "1024"
-}
-
-variable "service_memory" {
-  description = "Service memory"
-  type        = string
-  default     = "3072"
-}
-
-variable "task_count" {
-  description = "Number of instances of the service to run"
-  type        = number
-  default     = 1
 }
 
 variable "cidr" {
@@ -140,6 +79,25 @@ variable "region" {
   type        = string
   default     = "eu-west-2"
 }
+
+variable "project_tag" {
+  description = "Project"
+  type        = string
+  default     = "SDP"
+}
+
+variable "team_owner_tag" {
+  description = "Team Owner"
+  type        = string
+  default     = "Knowledge Exchange Hub"
+}
+
+variable "business_owner_tag" {
+  description = "Business Owner"
+  type        = string
+  default     = "DST"
+}
+
 
 locals {
   url = "${var.domain}.${var.domain_extension}"

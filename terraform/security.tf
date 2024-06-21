@@ -108,9 +108,9 @@ resource "aws_wafv2_rule_group" "ip_allow_rule_group" {
     }
 
     visibility_config {
-      cloudwatch_metrics_enabled = false
+      cloudwatch_metrics_enabled = true
       metric_name                = "alb-response-metric"
-      sampled_requests_enabled   = false
+      sampled_requests_enabled   = true
     }
   }
 
@@ -149,9 +149,9 @@ resource "aws_wafv2_rule_group" "ip_allow_rule_group" {
     }
 
     visibility_config {
-      cloudwatch_metrics_enabled = false
+      cloudwatch_metrics_enabled = true
       metric_name                = "default-response-metric"
-      sampled_requests_enabled   = false
+      sampled_requests_enabled   = true
     }
   }
 
@@ -190,17 +190,17 @@ resource "aws_wafv2_rule_group" "ip_allow_rule_group" {
     }
 
     visibility_config {
-      cloudwatch_metrics_enabled = false
+      cloudwatch_metrics_enabled = true
       metric_name                = "github-audit-metric"
-      sampled_requests_enabled   = false
+      sampled_requests_enabled   = true
     }
   }
 
 
   visibility_config {
-    cloudwatch_metrics_enabled = false
-    metric_name                = "ips-allowed-metric"
-    sampled_requests_enabled   = false
+    cloudwatch_metrics_enabled = true
+    metric_name                = "ip-group-allowed-metric"
+    sampled_requests_enabled   = true
   }
 }
 
@@ -213,7 +213,7 @@ resource "aws_wafv2_web_acl" "web_firewall" {
   }
 
   rule {
-    name     = "allow-rule-1"
+    name     = "ip-allow-rule"
     priority = 1
 
     override_action {
@@ -227,9 +227,9 @@ resource "aws_wafv2_web_acl" "web_firewall" {
     }
 
     visibility_config {
-      cloudwatch_metrics_enabled = false
-      metric_name                = "friendly-rule-metric-name"
-      sampled_requests_enabled   = false
+      cloudwatch_metrics_enabled = true
+      metric_name                = "ip-allow-metric"
+      sampled_requests_enabled   = true
     }
   }
 
@@ -258,21 +258,15 @@ resource "aws_wafv2_web_acl" "web_firewall" {
     }
 
     visibility_config {
-      cloudwatch_metrics_enabled = false
-      metric_name                = "friendly-rule-metric-name"
-      sampled_requests_enabled   = false
+      cloudwatch_metrics_enabled = true
+      metric_name                = "all-response-metric"
+      sampled_requests_enabled   = true
     }
-  }
-
-
-  tags = {
-    Tag1 = "Value1"
-    Tag2 = "Value2"
   }
 
   visibility_config {
     cloudwatch_metrics_enabled = false
-    metric_name                = "friendly-metric-name"
+    metric_name                = "waf-allowed-ip-metric"
     sampled_requests_enabled   = false
   }
 }

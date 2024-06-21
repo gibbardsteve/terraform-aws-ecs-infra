@@ -18,10 +18,6 @@ output "main_vpc_id" {
   value = data.aws_vpc.main.id
 }
 
-output "service_domain" {
-  value = "${var.service_subdomain}.${local.url}"
-}
-
 output "service_lb_dns_name" {
   value = aws_lb.service_lb.dns_name
 }
