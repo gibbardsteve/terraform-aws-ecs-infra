@@ -1,3 +1,4 @@
+#tfsec:ignore:aws-elb-alb-not-public
 resource "aws_lb" "service_lb" {
   name               = "${var.domain}-service-lb"
   internal           = false
@@ -5,6 +6,7 @@ resource "aws_lb" "service_lb" {
   security_groups    = [aws_security_group.allow_rules_load_balancer.id]
   subnets            = module.vpc.public_subnets
 
+  drop_invalid_header_fields = true
   enable_deletion_protection = var.lb_delete_protection
 
 }

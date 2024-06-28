@@ -9,6 +9,11 @@ terraform {
 
 resource "aws_ecs_cluster" "service_cluster" {
   name = "service-cluster"
+
+  setting {
+    name  = "containerInsights"
+    value = "enabled"
+  }
 }
 
 resource "aws_ecs_cluster_capacity_providers" "service_providers" {

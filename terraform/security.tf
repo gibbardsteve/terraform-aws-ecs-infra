@@ -3,6 +3,8 @@ resource "aws_security_group" "allow_rules_load_balancer" {
   name        = "allow-rules-lb"
   description = "Allow inbound https traffic on port 443 and redirect http traffic from port 80"
   vpc_id      = module.vpc.vpc_id
+
+  #tfsec:ignore:aws-ec2-no-public-ingress-sgr
   ingress {
     description = "Redirect HTTP to HTTPS"
     from_port   = 80
@@ -11,6 +13,7 @@ resource "aws_security_group" "allow_rules_load_balancer" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  #tfsec:ignore:aws-ec2-no-public-ingress-sgr
   ingress {
     description = "Allow inbound traffic on port 443"
     from_port   = 443
@@ -19,6 +22,7 @@ resource "aws_security_group" "allow_rules_load_balancer" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
+  #tfsec:ignore:aws-ec2-no-public-egress-sgr
   egress {
     description = "Allow all outbound traffic"
     from_port   = 0
