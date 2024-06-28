@@ -34,7 +34,7 @@ variable "domain_extension" {
 variable "lb_delete_protection" {
   description = "Enable deletion protection for the load balancer"
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "cidr" {

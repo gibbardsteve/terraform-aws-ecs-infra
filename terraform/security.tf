@@ -202,6 +202,12 @@ resource "aws_wafv2_rule_group" "ip_allow_rule_group" {
     metric_name                = "ip-group-allowed-metric"
     sampled_requests_enabled   = true
   }
+
+  depends_on = [
+    aws_wafv2_ip_set.allowed_ips_alb_response_subdomain,
+    aws_wafv2_ip_set.allowed_ips_default_response_subdomain,
+    aws_wafv2_ip_set.allowed_ips_github_audit_subdomain
+  ]
 }
 
 resource "aws_wafv2_web_acl" "web_firewall" {

@@ -1,9 +1,9 @@
+# Backend will be overwritten by env specific backend using the command
+# terraform init -backend-config="path/to/backend-<env>.tf"
+
 terraform {
   backend "s3" {
-    bucket         = "sdp-dev-tf-state"
-    key            = "sdp-dev-ecs-infra/terraform.tfstate"
-    region         = "eu-west-2"
-    dynamodb_table = "terraform-state-lock"
+    # backend config is selected by running terraform init -backend-config="path/to/backend-<env>.tfbackend"  }
   }
 }
 

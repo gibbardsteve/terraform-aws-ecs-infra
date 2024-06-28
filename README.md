@@ -92,3 +92,71 @@ A cluster that can dynamically allocate resources from FARGATE and FARGATE_SPOT.
 **Note:** Dynamic allocation based on traffic increase/decrease is **TODO**.
 
 This provides the basic infrastructure in AWS for the service to define it's own bespoke terraform to create a service, task-definition, target-group and any security-group rules or cognito requirements specific to that service. The service terraform would then apply the target-group to the load balancer created by this configuration to have traffic for warded to the service.
+
+## Deploy the Terraform
+
+The infrastructure is split into environments based on the following files:
+
+- env/<dev|prod>/backend-<dev|prod>.tfbackend
+
+  This file contains the terraform backend configuration for dev or prod environments.  This file is referenced when terraform init is applied.
+
+- env/<dev|prod>/<dev|prod>.tfvars
+
+  This is a local file contains the variable values used when running the terraform.  E.g this file would define the domain for the AWS account you are using, the account credentials and any ips that you want adding to WAF to whitelist.  The file is not stored in git.
+
+To run the deploy:
+
+- Initialise the backend using the appropriate environment config file
+
+```bash
+  cd terraform
+
+  terraform init -backend-config=env/dev/backend-dev.tfbackend -reconfigure
+```
+
+- Refresh the local terraform state, pointing to the appropriate environment variable file:
+
+```bash
+  terraform refresh -var-file=env/dev/dev.tfvars 
+```
+
+- Apply the terraform, pointing to the appropriate environment variable file:
+
+```bash
+  terraform apply -var-file=env/dev/dev.tfvars
+```
+
+## Destroy the Terraform
+
+To destroy the infrastructure resources any associated service resources must be deployed first.  Once this is done then the infrastructure can be destroyed using the following:
+
+- Initialise the backend using the appropriate environment config file
+
+```bash
+  cd terraform
+
+  terraform init -backend-config=env/dev/backend-dev.tfbackend -reconfigure
+```
+
+- Refresh the local terraform state, pointing to the appropriate environment variable file:
+
+```bash
+  terraform refresh -var-file=env/dev/dev.tfvars 
+```
+
+- Verify that the current plan (it should report no changes), pointing to the appropriate environment variable file:
+
+```bash
+  cd terraform
+
+  terraform plan -var-file=env/dev/dev.tfvars
+```
+
+- Destroy the current resources, pointing to the appropriate environment variable file:
+
+```bash
+  cd terraform
+
+  terraform destroy -var-file=env/dev/dev.tfvars
+```
